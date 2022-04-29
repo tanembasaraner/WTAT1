@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/tanembasaraner/WTAT1/issues"
   },
-  "homepage": "https://github.com/tanembasaraner/WTAT1#readme"
+  "homepage": "https://github.com/tanembasaraner/WTAT1#readme",
+  "dependencies": {
+    "express": "^4.18.0"
+  }
 }
