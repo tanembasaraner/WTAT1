@@ -5,8 +5,13 @@ const port = 3000,
  express = require("express"),
  layouts = require("express-ejs-layouts"),
  app = express();
+
  app.use(layouts);
+
  app.use(errorController.logErrors);
+ app.use(errorController.respondNoResourceFound);
+app.use(errorController.respondInternalError);
+
  app.set("view engine", "ejs");
  app.use(
  express.urlencoded({
@@ -15,6 +20,7 @@ const port = 3000,
 );
 
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use((req, res, next) => {
   console.log(`request made to: ${req.url}`);
