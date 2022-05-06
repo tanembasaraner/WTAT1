@@ -1,10 +1,28 @@
 "use strict";
 
-exports.sendReqParam = (req, res) => {
-  let booking = req.params.booking;
-  res.send(`This is the page for ${booking}`);
+
+exports.showSignUp = (req, res) => {
+ res.render("contact");
 };
-exports.respondWithName = (req, res) => {
-//  let paramsName = req.params.myName;
-  res.render("index", { name: paramsName });
+exports.postedSignUpForm = (req, res) => {
+ res.render("thanks");
+};
+var packages = [
+ {
+ title: "Event Driven Cakes",
+ cost: 50
+ },
+ {
+ title: "Asynchronous Artichoke",
+ cost: 25
+ },
+ {
+ title: "Object Oriented Orange Juice",
+ cost: 10
+ }
+];
+exports.showPackages = (req, res) => {
+ res.render("packages", {
+ offeredPackages: packages
+ });
 };

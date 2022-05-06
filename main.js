@@ -1,41 +1,38 @@
 const homeController = require("./controllers/homeController.js");
 const errorController = require("./controllers/errorController.js");
 
-const port = 3000,
- express = require("express"),
- layouts = require("express-ejs-layouts"),
+const express = require("express"),
+layouts = require("express-ejs-layouts"),
  app = express();
 
- app.use(layouts);
+ app.use(express.static("public"));
 
- app.use(errorController.logErrors);
- app.use(errorController.respondNoResourceFound);
-app.use(errorController.respondInternalError);
-
- app.set("view engine", "ejs");
  app.use(
  express.urlencoded({
  extended: false
  })
 );
-
 app.use(express.json());
-app.use(express.static("public"));
 
-app.use((req, res, next) => {
-  console.log(`request made to: ${req.url}`);
-  next();
-});
+app.set("view engine", "ejs");
+app.use(layouts);
 
-app.post("/", (req, res) => {
- console.log(req.body);
- console.log(req.query);
- res.send("POST Successful!");
+app.set("port", process.env.PORT || 3000);
+app.get("/", (req, res) => {
+ res.send("Welcome to TRAYS Travels!");
 });
-app.get("/name/:myName",homeController.respondWithName);
-app.get("/items/:booking", homeController.sendReqParam);
+app.get("/packages", homeController.showPackages);
+app.get("/contact", homeController.showSignUp);
+app.post("/contact", homeController.postedSignUpForm);
 
-app.listen(port, () => {
- console.log(`The Express.js server has started and is listening
-➥ on port number: ${port}`);
-});
+//error handling
+app.use(errorController.pageNotFoundError);
+app.use(errorController.internalServerError);
+
+app.listen(app.get("port"), () => {
+ console.log(
+ `Server running at http://localhost:${app.get(
+"port"
+ )}`
+ );
+ });
