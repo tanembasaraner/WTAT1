@@ -1,9 +1,12 @@
 const homeController = require("./controllers/homeController.js");
+const errorController = require("./controllers/errorController.js");
+
 const port = 3000,
  express = require("express"),
  layouts = require("express-ejs-layouts"),
  app = express();
  app.use(layouts);
+ app.use(errorController.logErrors);
  app.set("view engine", "ejs");
  app.use(
  express.urlencoded({
