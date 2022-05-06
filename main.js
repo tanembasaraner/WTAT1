@@ -1,7 +1,10 @@
 const homeController = require("./controllers/homeController.js");
 const port = 3000,
  express = require("express"),
+ layouts = require("express-ejs-layouts"),
  app = express();
+ app.use(layouts);
+ app.set("view engine", "ejs");
  app.use(
  express.urlencoded({
  extended: false
@@ -20,7 +23,7 @@ app.post("/", (req, res) => {
  console.log(req.query);
  res.send("POST Successful!");
 });
-
+app.get("/name/:myName",homeController.respondWithName);
 app.get("/items/:booking", homeController.sendReqParam);
 
 app.listen(port, () => {
