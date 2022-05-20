@@ -1,5 +1,7 @@
 const homeController = require("./controllers/homeController.js");
 const errorController = require("./controllers/errorController.js");
+const subscribersController = require("./controllers/subscribersController.js");
+
 //set up mongoose
 const mongoose = require("mongoose");
 mongoose.connect(
@@ -72,25 +74,7 @@ Agent.create(
  console.log(savedDocument);
  }
 );
-Agent.create(
- {
- brand_name: "cost saver",
- email: "CS@gmail.com"
- },
- function (error, savedDocument) {
- if (error) console.log(error);
- console.log(savedDocument);
- }
-);
-var myQuery2= Agent.findOneAndDelete({ brand_name: "cost saver"},
-function(err,docs){
-  if(err){
-    console.log(err)
-  }
-  else{
-    console.log("deleted user:"+docs);
-    }
-});
+
 
 
 
@@ -114,9 +98,15 @@ app.set("port", process.env.PORT || 3000);
 app.get("/", (req, res) => {
  res.send("Welcome to TRAYS Travels!");
 });
+app.get("/subscribers", subscribersController.getAllSubscribers,
+(req, res, next) => {
+res.render("subscribers", {subscribers: req.data})
+});
+
 app.get("/packages", homeController.showPackages);
-app.get("/contact", homeController.showSignUp);
-app.post("/contact", homeController.postedSignUpForm);
+
+app.get("/contact", subscribersController.getSubscriptionPage);
+app.post("/subscribe", subscribersController.saveSubscriber);
 
 //error handling
 app.use(errorController.pageNotFoundError);
