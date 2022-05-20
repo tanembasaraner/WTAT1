@@ -1,110 +1,46 @@
 const homeController = require("./controllers/homeController.js");
 const errorController = require("./controllers/errorController.js");
 const subscribersController = require("./controllers/subscribersController.js");
+const Subscriber = require("./models/subscriber.js")
+const TravelPackage = require("./models/travelPackage.js")
+const Agent = require("./models/agent.js")
+const express = require("express");
+const layouts = require("express-ejs-layouts");
+const app = express();
 
-//set up mongoose
-const mongoose = require("mongoose");
+const mongoose = require("mongoose");//set up mongoose
 mongoose.connect(
- "mongodb://localhost:27017/recipe_db",
+ "mongodb://localhost:27017/trays_travels",
  {useNewUrlParser: true}
 );
+app.set("view engine", "ejs");
+app.set("port", process.env.PORT || 3000);
+app.use(
+express.urlencoded({
+extended: false
+})
+);
+app.use(express.json());
+app.use(layouts);
+app.use(express.static("public"));
+
+
 const db = mongoose.connection;
 db.once("open", () => {
  console.log("Successfully connected to MongoDB using Mongoose!");
 });
-const Subscriber = require("./models/subscriber.js")
-const TravelPackage = require("./models/travelPackage.js")
-const Agent = require("./models/agent.js")
-
-
-// var subscriber1 = new Subscriber({ //create and save in 2 steps
-//  name: "Jon Wexler",
-//  email: "jon@jonwexler.com"
-// });
-// subscriber1.save((error, savedDocument) => {
-//  if (error) console.log(error);
-//  console.log(savedDocument);
-// });
-Subscriber.create(
- {
- name: "Jon Wexler",
- email: "jon@jonwexler.com"
- },
- function (error, savedDocument) {
- if (error) console.log(error);
- console.log(savedDocument);
- }
-);
-//Find subscribers
-var myQuery = Subscriber.findOne({
- name: "Jon Wexler"
- })
- .where("email", /wexler/);
-myQuery.exec((error, data) => {
- if (data) console.log(data.name);
-});
-// var travelPackage1 = new TravelPackage({ //create and save in 2 steps
-//  country: "Thailand",
-//  price:"10000",
-//  dates: "20.09.2022-30.09.2022"
-// });
-// travelPackage1.save((error, savedDocument) => {
-//  if (error) console.log(error);
-//  console.log(savedDocument);
-// });
-TravelPackage.create(
- {
-   country: "Thailand",
-   price:"10000",
-   dates:"20.09.2022-30.09.2022"
- },
- function (error, savedDocument) {
- if (error) console.log(error);
- console.log(savedDocument);
- }
-);
-
-Agent.create(
- {
- brand_name: "TRAYS",
- email: "TRAYStravels@gmail.com"
- },
- function (error, savedDocument) {
- if (error) console.log(error);
- console.log(savedDocument);
- }
-);
 
 
 
 
-const express = require("express"),
-layouts = require("express-ejs-layouts"),
- app = express();
-
- app.use(express.static("public"));
-
- app.use(
- express.urlencoded({
- extended: false
- })
-);
-app.use(express.json());
-
-app.set("view engine", "ejs");
-app.use(layouts);
-
-app.set("port", process.env.PORT || 3000);
 app.get("/", (req, res) => {
  res.send("Welcome to TRAYS Travels!");
 });
-app.get("/subscribers", subscribersController.getAllSubscribers,
-(req, res, next) => {
-res.render("subscribers", {subscribers: req.data})
-});
+
 
 app.get("/packages", homeController.showPackages);
 
+app.get("/subscribers", subscribersController.getAllSubscribers);
 app.get("/contact", subscribersController.getSubscriptionPage);
 app.post("/subscribe", subscribersController.saveSubscriber);
 
