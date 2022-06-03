@@ -4,7 +4,7 @@ mongoose = require("mongoose");
 exports.getSubscriptionPage = (req, res) => {
  res.render("contact");
 };
-exports.getAllSubscribers = (req, res) => {
+exports.index = (req, res) => {
  Subscriber.find({})
  .exec()
  .then((subscribers) => {

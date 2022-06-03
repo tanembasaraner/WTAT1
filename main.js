@@ -1,7 +1,6 @@
 const homeController = require("./controllers/homeController.js");
 const errorController = require("./controllers/errorController.js");
 const subscribersController = require("./controllers/subscribersController.js");
-const Subscriber = require("./models/subscriber.js")
 const TravelPackage = require("./models/travelPackage.js")
 const Agent = require("./models/agent.js")
 const express = require("express");
@@ -31,7 +30,8 @@ db.once("open", () => {
 });
 
 
-
+const usersController = require("./controllers/usersController");
+app.get("/users", usersController.index, usersController.indexView)
 
 app.get("/", (req, res) => {
  res.send("Welcome to TRAYS Travels!");
@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
 
 app.get("/packages", homeController.showPackages);
 
-app.get("/subscribers", subscribersController.getAllSubscribers);
+app.get("/subscribers/index", subscribersController.index);
 app.get("/contact", subscribersController.getSubscriptionPage);
 app.post("/subscribe", subscribersController.saveSubscriber);
 

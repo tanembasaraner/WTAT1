@@ -1,0 +1,19 @@
+<h2>Users Table</h2>
+<table class="table">
+<thead>
+<tr>
+<th>Country</th>
+<th>Price</th>
+<th>Dates</th>
+</tr>
+</thead>
+<tbody>
+<% offeredPackages.forEach(offeredPackages => { %>
+<tr>
+<td><%= offeredPackages.country %></td>
+<td><%= offeredPackages.price %></td>
+<td><%= offeredPackages.dates %></td>
+</tr>
+<% }); %>
+</tbody>
+</table>
