@@ -1,0 +1,12 @@
+<div class="data-form">
+    <form class="form-signin" action="<%=`/packages/create`%>" method="POST">
+      <h2 class="form-signin-heading">Create a new package:</h2>
+      <label for="inputCountry">Country</label>
+      <input type="text" name="country" id="inputCountry" class="form-control" placeholder="Country" autofocus>
+      <label for="inputPrice">price</label>
+      <input type="text" name="price" id="inputPrice" class="form-control" placeholder="price">
+      <label for="inputDates">Dates</label>
+      <input type="text" name="dates" id="inputDates" pattern="\d*" class="form-control" placeholder="Dates" required>
+      <br /><button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+    </form>
+  </div>

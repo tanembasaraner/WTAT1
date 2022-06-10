@@ -1,19 +1,38 @@
-<h2>Users Table</h2>
+<h2 class="center">Packages Table</h2>
 <table class="table">
-<thead>
-<tr>
-<th>Country</th>
-<th>Price</th>
-<th>Dates</th>
-</tr>
-</thead>
-<tbody>
-<% offeredPackages.forEach(offeredPackages => { %>
-<tr>
-<td><%= offeredPackages.country %></td>
-<td><%= offeredPackages.price %></td>
-<td><%= offeredPackages.dates %></td>
-</tr>
-<% }); %>
-</tbody>
+    <thead>
+        <tr>
+            <th>Country</th>
+            <th>Price</th>
+            <th>Dates</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% packages.forEach(packages=> { %>
+            <tr>
+                <td>
+                    <a href="<%= `/packages/${packages._id}` %>">
+                        <%= packages.country %>
+                    </a>
+                </td>
+                <td>
+                    <%= packages.price %>
+                </td>
+                <td>
+                    <%= packages.dates %>
+                </td>
+                <td>
+                    <a href="<%=`/packages/${packages._id}/edit`%>">
+                        Edit
+                    </a>
+                </td>
+                <td>
+                    <a href="<%= `/packages/${packages._id}/delete?_method=DELETE` %>"
+                        onclick="return confirm('Are you sure you want to delete this record?')" a>Delete</a>
+                </td>
+            </tr>
+            <% }); %>
+    </tbody>
 </table>
