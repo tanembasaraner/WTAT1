@@ -1,0 +1,15 @@
+<div class="data-form">
+    <form class="form-signin" action="<%=`/packages/${package._id}/update?_method=PUT`%>" method="POST">
+        <h2 class="form-signin-heading">Edit package:</h2>
+        <label for="inputCountry">Country</label>
+        <input type="text" name="country" id="inputCountry" class="form-control" value="<%= package.country %>"
+            placeholder="country" autofocus>
+        <label for="inputPrice">Price</label>
+        <input type="text" name="price" id="inputPrice" class="form-control"
+            value="<%= package.price %>" placeholder="Price">
+        <label for="inputDates">Dates</label>
+        <input type="text" name="dates" id="inputDates" pattern="\d*" class="form-control"
+            value="<%= package.dates %>" placeholder="Dates" required>
+        <br /><button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+    </form>
+</div>
