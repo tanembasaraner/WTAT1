@@ -33,13 +33,16 @@ module.exports = {
     let subscriberParams = getSubscriberParams(req.body);
     Subscriber.create(subscriberParams)
       .then(subscriber => {
+        req.flash("success", `${subscriber.fullName}'s account created successfully!`);
         res.locals.redirect = "/subscribers";
         res.locals.subscriber = subscriber;
         next();
       })
       .catch(error => {
         console.log(`Error saving subscriber: ${error.message}`);
-        next(error);
+        res.locals.redirect = "/subscribers/new";
+        req.flash("error", `Failed to create subscriber account because: ${error.message}.`);
+        next();
       });
   },
 
