@@ -24,15 +24,18 @@ module.exports = {
             dates: req.body.dates
         };
         Package.create(packageParams)
-            .then(packages => {
-                res.locals.redirect = "/packages";
-                res.locals.packages = packages;
-                next();
-            })
-            .catch(error => {
-                console.log(`Error saving package: ${error.message}`);
-                next(error);
-            });
+        .then(package => {
+            req.flash("success", `${package.country} package created successfully!`);
+            res.locals.redirect = "/packages";
+            res.locals.package = package;
+            next();
+        })
+        .catch(error => {
+            console.log(`Error saving a package: ${error.message}`);
+            res.locals.redirect = "/packages/new";
+            req.flash("error", `Failed to create a package because: ${error.message}.`);
+            next();
+        });
     },
     redirectView: (req, res, next) => {
         let redirectPath = res.locals.redirect;
