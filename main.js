@@ -10,6 +10,9 @@ const layouts = require("express-ejs-layouts");
 const app = express();
 const router = express.Router();
 const methodOverride = require("method-override");
+const expressValidator =require("express-validator") ;
+const User = require("./models/user");
+const passport = require("passport");
 
 
 router.use(
@@ -31,6 +34,7 @@ extended: false
 })
 );
 app.use(express.json());
+router.use(expressValidator());
 app.use(layouts);
 app.use(express.static("public"));
 app.use("/", router);
@@ -47,12 +51,26 @@ router.use(expressSession({
  resave: false,
  saveUninitialized: false
 }));
+router.use(passport.initialize());
+router.use(passport.session());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 router.use(connectFlash());
 
 router.use((req, res, next) => {
-  res.locals.flashMessages = req.flash();
+  res.locals.loggedIn = req.isAuthenticated();
+ res.locals.currentUser = req.user;
+ res.locals.flashMessages = req.flash();
+
   next();
 });
+router.use(homeController.logRequestPaths);
+
+router.get("/", homeController.index);
+router.get("/contact", homeController.getSubscriptionPage);
+
 
 
 const db = mongoose.connection;
@@ -68,11 +86,14 @@ app.get("/subscribers", subscribersController.index, subscribersController.index
 router.get("/users/new", usersController.new);
 router.post("/users/create", usersController.create, usersController.redirectView);
 router.get("/users/login", usersController.login);
+router.get("/users/login", usersController.login);
 router.post("/users/login", usersController.authenticate, usersController.redirectView);
+router.get("/users/logout", usersController.logout, usersController.redirectView)
 router.get("/users/:id/edit", usersController.edit);
 router.put("/users/:id/update", usersController.update, usersController.redirectView);
 router.delete("/users/:id/delete", usersController.delete, usersController.redirectView);
 router.get("/users/:id", usersController.show, usersController.showView);
+router.post("/users/create", usersController.validate,usersController.create, usersController.redirectView);
 
 router.get("/packages/new", travelPackagesController.new);
 router.post("/packages/create", travelPackagesController.create, travelPackagesController.redirectView);
@@ -88,16 +109,7 @@ router.put("/subscribers/:id/update", subscribersController.update, subscribersC
 router.delete("/subscribers/:id/delete", subscribersController.delete, subscribersController.redirectView);
 router.get("/subscribers/:id", subscribersController.show, subscribersController.showView);
 
-app.get("/", (req, res) => {
- res.send("Welcome to TRAYS Travels!");
-});
 
-// app.get("/contact", subscribersController.getSubscriptionPage);
-// app.post("/subscribe", subscribersController.saveSubscriber);
-
-//error handling
-app.use(errorController.pageNotFoundError);
-app.use(errorController.internalServerError);
 
 app.listen(app.get("port"), () => {
  console.log(
