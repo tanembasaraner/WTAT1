@@ -1,5 +1,6 @@
-const Subscriber = require("./subscriber")
-const mongoose = require("mongoose"),
+const Subscriber = require("./subscriber"),
+bcrypt = require("bcrypt"),
+mongoose = require("mongoose"),
     { Schema } = mongoose,
     userSchema = new Schema({
         name: {
@@ -60,4 +61,19 @@ userSchema.pre("save", function (next) {
     } else {
         next();
     }
+    userSchema.pre("save", function(next) {
+        let user = this;
+        bcrypt.hash(user.password, 10).then(hash => {
+        user.password = hash;
+        next();
+        })
+        .catch(error => {
+       console.log(`Error in hashing password: ${error.message}`);
+       next(error);
+        });
+       });
+       userSchema.methods.passwordComparison = function(inputPassword){
+        let user = this;
+        return bcrypt.compare(inputPassword, user.password);
+       };
 });

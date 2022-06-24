@@ -1,4 +1,15 @@
-const User = require("../models/user");
+const User = require("../models/user"),
+getUserParams = body => {
+    return {
+      name: {
+        first: body.first,
+        last: body.last
+      },
+      email: body.email,
+      password: body.password,
+      zipCode: body.zipCode
+    };
+  };
 module.exports = {
     index: (req, res, next) => {
         User.find()
@@ -12,32 +23,16 @@ module.exports = {
             });
     },
     indexView: (req, res) => {
-        res.render("users/index");
+        res.render("users/index", {
+            flashMessages: {
+            success: "Loaded all users!"
+            }
+           }); 
     },
     new: (req, res) => {
         res.render("users/new");
     },
-    create: (req, res, next) => {
-        let userParams = {
-            name: {
-                first: req.body.first,
-                last: req.body.last
-            },
-            email: req.body.email,
-            password: req.body.password,
-            zipCode: req.body.zipCode
-        };
-        User.create(userParams)
-            .then(user => {
-                res.locals.redirect = "/users";
-                res.locals.user = user;
-                next();
-            })
-            .catch(error => {
-                console.log(`Error saving user: ${error.message}`);
-                next(error);
-            });
-    },
+
     redirectView: (req, res, next) => {
         let redirectPath = res.locals.redirect;
         if (redirectPath) res.redirect(redirectPath);
@@ -106,5 +101,55 @@ module.exports = {
                 console.log(`Error deleting user by ID: ${error.message}`);
                 next();
             });
-    }
+    },
+    create: (req, res, next) => {
+        let userParams = getUserParams(req.body);
+        User.create(userParams)
+        .then(user => {
+       req.flash("success", `${user.fullName}'s account created
+       ➥ successfully!`);
+       res.locals.redirect = "/users";
+       res.locals.user = user;
+       next();
+        })
+        .catch(error => {
+       console.log(`Error saving user: ${error.message}`);
+       res.locals.redirect = "/users/new";
+       req.flash(
+       "error",
+       `Failed to create user account because: ➥${error.message}.`
+       );
+       next();
+        });
+       },
+       login: (req, res) => {
+        res.render("users/login");
+       },
+       authenticate: (req, res, next) => {
+        User.findOne({email: req.body.email})
+       .then(user => {
+       if (user) {
+       user.passwordComparison(req.body.password)
+       .then(passwordsMatch => {
+       if (passwordsMatch) {
+        res.locals.redirect = `/users/${user._id}`;
+       req.flash("success", `${user.fullName}'s logged in successfully!`);
+       res.locals.user = user;
+       } else {
+       req.flash("error", "Failed to log in user account:Incorrect Password.");
+       res.locals.redirect = "/users/login";
+       }
+       next();
+       });
+       } else {
+       req.flash("error", "Failed to log in user account: User account not found.");
+       res.locals.redirect = "/users/login";
+       next();
+        }
+        })
+       .catch(error => {
+       console.log(`Error logging in user: ${error.message}`);
+       next(error);
+       });
+       }
 };
