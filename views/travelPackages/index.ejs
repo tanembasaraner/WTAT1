@@ -13,7 +13,7 @@
         <% packages.forEach(packages=> { %>
             <tr>
                 <td>
-                    <a href="<%= `/packages/${packages._id}` %>">
+                    <a href="<%= `/travelPackages/${packages._id}` %>">
                         <%= packages.country %>
                     </a>
                 </td>
@@ -24,12 +24,12 @@
                     <%= packages.dates %>
                 </td>
                 <td>
-                    <a href="<%=`/packages/${packages._id}/edit`%>">
+                    <a href="<%=`/travelPackages/${packages._id}/edit`%>">
                         Edit
                     </a>
                 </td>
                 <td>
-                    <a href="<%= `/packages/${packages._id}/delete?_method=DELETE` %>"
+                    <a href="<%= `/travelPackages/${packages._id}/delete?_method=DELETE` %>"
                         onclick="return confirm('Are you sure you want to delete this record?')" a>Delete</a>
                 </td>
             </tr>
