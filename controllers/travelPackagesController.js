@@ -12,10 +12,14 @@ module.exports = {
             });
     },
     indexView: (req, res) => {
-        res.render("packages/index");
-    },
+        if (req.query.format === "json") {
+        res.json(res.locals.packages);
+        } else {
+        res.render("travelPackages/index");
+        }
+        },
     new: (req, res) => {
-        res.render("packages/new");
+        res.render("travelPackages/new");
     },
     create: (req, res, next) => {
         let packageParams = {
@@ -26,13 +30,13 @@ module.exports = {
         Package.create(packageParams)
         .then(package => {
             req.flash("success", `${package.country} package created successfully!`);
-            res.locals.redirect = "/packages";
+            res.locals.redirect = "/travelPackages";
             res.locals.package = package;
             next();
         })
         .catch(error => {
             console.log(`Error saving a package: ${error.message}`);
-            res.locals.redirect = "/packages/new";
+            res.locals.redirect = "/travelPackages/new";
             req.flash("error", `Failed to create a package because: ${error.message}.`);
             next();
         });
@@ -55,13 +59,13 @@ module.exports = {
             });
     },
     showView: (req, res) => {
-        res.render("packages/show");
+        res.render("travelPackages/show");
     },
     edit: (req, res, next) => {
         let packageId = req.params.id;
         Package.findById(packageId)
             .then(package => {
-                res.render("packages/edit", {
+                res.render("travelPackages/edit", {
                     package: package
                 });
             })
@@ -81,7 +85,7 @@ module.exports = {
             $set: packageParams
         })
             .then(package => {
-                res.locals.redirect = `/packages/${packageId}`;
+                res.locals.redirect = `/travelPackages/${packageId}`;
                 res.locals.package = package;
                 next();
             })
@@ -94,7 +98,7 @@ module.exports = {
         let packageId = req.params.id;
         Package.findByIdAndRemove(packageId)
             .then(() => {
-                res.locals.redirect = "/packages";
+                res.locals.redirect = "/travelPackages";
                 next();
             })
             .catch(error => {

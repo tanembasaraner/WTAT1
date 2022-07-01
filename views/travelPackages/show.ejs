@@ -25,14 +25,14 @@
   
 
   <div>
-    <a class="button" href="<%=`/packages/${package._id}/edit`%>">
+    <a class="button" href="<%=`/travelPackages/${package._id}/edit`%>">
       Edit Package Details
     </a>
   </div>
   <div>
-    <a class="button" href="<%= `/packages/${package._id}/delete?_method=DELETE` %>" onclick="return confirm('Are you sure you want to delete this record?')" a>Delete</a>
+    <a class="button" href="<%= `/travelPackages/${package._id}/delete?_method=DELETE` %>" onclick="return confirm('Are you sure you want to delete this record?')" a>Delete</a>
   </div>
   <div>
-    <a class="button" href="/packages">View all packages</a>
+    <a class="button" href="/travelPackages">View all packages</a>
   </div>
   
