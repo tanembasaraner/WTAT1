@@ -1,36 +1,36 @@
 <h1 class="center">Package Data for
-    <%= package.country%>
+    <%= travelPackage.country%>
   </h1>
   
   <table class="table">
     <tr>
       <th>Country</th>
       <td>
-        <%= package.country%>
+        <%= travelPackage.country%>
       </td>
     </tr>
     <tr>
       <th>Price</th>
       <td>
-        <%= package.price%>
+        <%= travelPackage.price%>
       </td>
     </tr>
     <tr>
       <th>Dates</th>
       <td>
-        <%= package.dates%>
+        <%= travelPackage.dates%>
       </td>
     </tr>
   </table>
   
 
   <div>
-    <a class="button" href="<%=`/travelPackages/${package._id}/edit`%>">
+    <a class="button" href="<%=`/travelPackages/${travelPackage._id}/edit`%>">
       Edit Package Details
     </a>
   </div>
   <div>
-    <a class="button" href="<%= `/travelPackages/${package._id}/delete?_method=DELETE` %>" onclick="return confirm('Are you sure you want to delete this record?')" a>Delete</a>
+    <a class="button" href="<%= `/travelPackages/${travelPackage._id}/delete?_method=DELETE` %>" onclick="return confirm('Are you sure you want to delete this record?')" a>Delete</a>
   </div>
   <div>
     <a class="button" href="/travelPackages">View all packages</a>
