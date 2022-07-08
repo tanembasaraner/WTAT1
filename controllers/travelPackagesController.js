@@ -1,4 +1,5 @@
 const TravelPackage = require("../models/travelPackage");
+httpStatus = require("http-status-codes");
 module.exports = {
     index: (req, res, next) => {
         TravelPackage.find()
