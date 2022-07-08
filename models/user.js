@@ -3,6 +3,7 @@
 const mongoose = require("mongoose"),
   { Schema } = mongoose,
   Subscriber = require("./subscriber"),
+  randToken = require("rand-token"),
   bcrypt = require("bcrypt"),
   passportLocalMongoose = require("passport-local-mongoose"),
   userSchema = new Schema(
@@ -64,6 +65,12 @@ userSchema.pre("save", function (next) {
   } else {
     next();
   }
+});
+
+userSchema.pre("save", function(next) {
+  let user = this;
+  if (!user.apiToken) user.apiToken = randToken.generate(16);
+  next();
 });
 
 module.exports = mongoose.model("User", userSchema);
