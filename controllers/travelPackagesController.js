@@ -1,5 +1,7 @@
 const TravelPackage = require("../models/travelPackage");
-httpStatus = require("http-status-codes");
+const httpStatus = require("http-status-codes");
+const User = require("../models/user");
+
 module.exports = {
     index: (req, res, next) => {
         TravelPackage.find()
@@ -83,7 +85,7 @@ module.exports = {
                 price: req.body.price
             };
 
-            TravelPackage.findByIdAndUpdate(travelPackageID, {
+        TravelPackage.findByIdAndUpdate(travelPackageID, {
             $set: packageParams
         })
             .then(travelPackages => {

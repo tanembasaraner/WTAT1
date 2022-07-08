@@ -9,10 +9,10 @@ const router = require("express").Router(),
     homeRoutes = require("./homeRoutes"),
     apiRoutes = require("./apiRoutes");
 
+router.use("/api", apiRoutes);
 router.use("/users", userRoutes);
 router.use("/subscribers", subscriberRoutes);
 router.use("/travelPackages", travelPackageRoutes);
-router.use("/api", apiRoutes);
 router.use("/", homeRoutes);
 router.use("/", errorRoutes);
 
